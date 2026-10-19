@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>舔狗日记</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2b2118">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#241c12;color:#e8dcc0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+h1{font-size:1.7rem;letter-spacing:.35em;margin:10px 0 4px;color:#f0d9a8}
+.sub{color:#a68d5f;font-size:.8rem;margin-bottom:22px;letter-spacing:.15em}
+.paper{background:linear-gradient(160deg,#f7efdb,#eedfbc);color:#4a3a24;border-radius:6px;width:100%;max-width:560px;padding:28px 26px 24px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.5);transform:rotate(-.6deg)}
+.paper::before{content:"";position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(2deg);width:120px;height:28px;background:rgba(210,190,150,.55);border-left:1px dashed rgba(120,100,70,.4);border-right:1px dashed rgba(120,100,70,.4)}
+.meta{display:flex;justify-content:space-between;border-bottom:2px solid rgba(150,110,60,.35);padding-bottom:10px;margin-bottom:14px;font-size:.95rem;color:#7a5c33;font-weight:bold}
+.body{font-family:"Segoe Print","Bradley Hand","KaiTi","楷体",cursive;font-size:1.25rem;line-height:2.05;min-height:220px;white-space:pre-wrap}
+.btns{display:flex;gap:12px;margin-top:22px;width:100%;max-width:560px}
+button{flex:1;padding:14px;border:none;border-radius:12px;font-size:1rem;cursor:pointer;font-weight:bold}
+#next{background:linear-gradient(135deg,#e8b64c,#d1942a);color:#3a2a10}
+#copy{background:#3a2f1e;color:#e8dcc0;border:1px solid #6b573a}
+#card{background:#3a2f1e;color:#e8dcc0;border:1px solid #6b573a}
+.hist{margin-top:18px;font-size:.78rem;color:#8a734f;max-width:560px;width:100%}
+.hist div{padding:7px 4px;border-bottom:1px dashed rgba(166,141,95,.35);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist div:hover{color:#e8dcc0}
+.foot{margin-top:auto;padding-top:26px;font-size:.72rem;color:#6b573a}
+@keyframes fade{from{opacity:0;transform:translateY(8px) rotate(-.6deg)}to{opacity:1;transform:translateY(0) rotate(-.6deg)}}
+.anim{animation:fade .45s ease}
+</style>
+</head>
+<body>
+<h1>舔狗日记</h1>
+<div class="sub">卑微 · 真诚 · 又好笑</div>
+<div class="paper anim" id="paper">
+  <div class="meta"><span id="date"></span><span id="weather"></span></div>
+  <div class="body" id="body"></div>
+</div>
+<div class="btns">
+  <button id="next">再来一篇</button>
+  <button id="copy">复制</button>
+  <button id="card">生成卡片</button>
+</div>
+<div class="hist" id="hist"></div>
+<div class="foot">纯属整活 · 如有雷同你也是舔狗</div>
+<script>
+const D=[
+"今天我问她：在干嘛。她说：在洗澡。我说：洗干净点等我。她骂我是变态。我好开心，这是她第一次跟我说这么多字。",
+"她今天发朋友圈说想吃火锅，我把攒了三个月的生活费转给她，她说：谢谢哥哥。原来我在她心里是哥哥，我哭了一晚上。",
+"今天她没回我消息，我很担心。后来听说她跟男朋友去看电影了，我就放心了。原来她没事，太好了。",
+"昨天她感冒了，我买了药送到她楼下。她说不用，让我别烦她。我在楼下等了三小时，药都凉了，但我的心是暖的。",
+"她说她喜欢温柔的男生，我今天跟室友说话都轻声细语的。室友说我像个变态，但她一定会喜欢这样的我。",
+"今天是她的生日，我攒了两个月工资给她买了条项链。她说太贵重不能收，转手送给了她闺蜜。我很欣慰，她真善良，懂得分享。",
+"我问她喜欢什么样的人，她说喜欢高的。我今天去打了篮球，虽然我只有一米六五，但为爱努力长高三厘米不过分吧。",
+"她今天夸我人好，我开心得睡不着觉。“你是个好人”这四个字，是她对我最高的评价。",
+"今天下雨了，我给她送伞。她说她有男朋友接，不用了。我把伞放在她宿舍门口，淋着雨回去了。雨水和泪水混在一起，分不清了。",
+"她说最近想减肥，我每天早上六点起来给她买减脂餐。她说谢谢，转头就去吃了火锅。我不怪她，火锅那么好吃，换我我也吃。",
+"今天她跟我说了晚安，虽然是群发的。我把那条消息看了二十遍。晚安，我的女孩。",
+"她今天换了新头像，是跟她男朋友的合照。我点了个赞，评论“郎才女貌”。她回了我一个谢谢，我激动得手都在抖。",
+"我问她在干嘛，她说：刚起。我说：早安。她没回。可能是又睡着了，真可爱，睡美人。",
+"今天情人节，她跟男朋友出去玩了。我一个人在宿舍给她发了520块钱红包，她领了。我很开心，她收了我的心意。",
+"她说她肚子疼，我给她点了红糖水外卖。外卖员说送到了，她说谢谢。我感觉我也是她生活的一部分了。",
+"今天她发烧39度，我急得不行。她说她男朋友会照顾她，让我别操心。我一晚上没睡，查了一晚上退烧偏方发给她，她没回。没关系，她看到了就好。",
+"她今天问我借2000块钱，说下个月还。我转了5200，多出来的3200是我的心意。她说你真好，我说是应该的。",
+"今天我看到她跟别的男生有说有笑，我的心好痛。但转念一想，她笑起来真好看，我又不痛了。",
+"她说她想养猫，我买了猫粮猫砂猫窝寄到她家。她说谢谢哥哥，猫很可爱。我说猫随主人，都可爱。",
+"今天她把我删了，我很难过。后来用小号加她，她通过了。我又能看到她的朋友圈了，真好。",
+"她今天发了自拍，配文“今天也是美美的一天”。我评论“仙女下凡”，她没回我，但赞了我上一条朋友圈。双向奔赴了属于是。",
+"今天降温了，我提醒她多穿点。她说：嗯。一个“嗯”字，包含了她对我的全部信任。",
+"她说她失恋了，我安慰了她一晚上。她说有你真好，我说我会一直在。结果第二天她就跟前男友复合了。真好，她又开心了。",
+"今天我去她公司楼下等她下班，想给她个惊喜。结果看到她上了别的男人的车。我默默地走了，惊喜变成了惊吓，但爱不会。",
+"她说她想吃小龙虾，我点了三斤送过去。她跟室友吃得很开心，还发了朋友圈。我在下面评论“多吃点”，她回了个可爱的表情。",
+"今天她问我：你是不是喜欢我。我否认了。我怎么能让她有心理负担呢，喜欢是我的事，与她无关。",
+"她今天结婚了，新郎不是我。我随了8888的份子钱，她说谢谢。我说新婚快乐百年好合，转身我就哭了，但我是笑着哭的。",
+"今天是她拉黑我的第30天，我决定放下她了。明天继续喜欢她。",
+"她说她手机坏了，我把我的新手机给她了，自己用回旧手机。她说谢谢，我说应该的。她用新手机跟男朋友聊天一定很流畅吧。",
+"今天我终于鼓起勇气跟她表白了，她说：我们还是做朋友吧。我笑着说好。朋友也挺好的，至少还能留在她身边。",
+"她今天说想一个人静静，我就没打扰她。虽然我一晚上看了八百遍手机，但我忍住了。爱是克制。",
+"今天她夸我做的PPT好看，我开心了一整天。原来我的才华，终于被她发现了。"
+];
+const W=["晴","晴","多云","多云","阴","小雨","晴转多云","雾"];
+const $=id=>document.getElementById(id);
+let dayIdx=+(localStorage.getItem('tiangou_day')??-14);
+let cur=null,hist=JSON.parse(localStorage.getItem('tiangou_hist')||'[]');
+function fmtDate(d){return `${d.getMonth()+1}月${d.getDate()}日`}
+function pick(){
+  const body=D[Math.floor(Math.random()*D.length)];
+  const d=new Date();d.setDate(d.getDate()+dayIdx);
+  const w=W[Math.floor(Math.random()*W.length)];
+  cur={date:fmtDate(d),full:`${d.getFullYear()}年${fmtDate(d)}`,weather:w,body};
+  dayIdx++;localStorage.setItem('tiangou_day',dayIdx);
+  $('date').textContent=cur.date;$('weather').textContent='天气：'+w;
+  $('body').textContent=body;
+  const p=$('paper');p.classList.remove('anim');void p.offsetWidth;p.classList.add('anim');
+  hist.unshift(`${cur.date} ${w} · ${body.slice(0,18)}…`);hist=hist.slice(0,8);
+  localStorage.setItem('tiangou_hist',JSON.stringify(hist));renderHist();
+}
+function renderHist(){
+  $('hist').innerHTML='<div style="color:#a68d5f;cursor:default;border:none">—— 最近看过的 ——</div>'+
+    hist.map((h,i)=>`<div data-i="${i}">${h}</div>`).join('');
+}
+$('next').onclick=pick;
+$('copy').onclick=()=>{
+  if(!cur)return;
+  navigator.clipboard.writeText(`${cur.full} ${cur.weather}\n${cur.body}`).then(()=>{
+    const b=$('copy');b.textContent='已复制 ✓';setTimeout(()=>b.textContent='复制',1200);
+  });
+};
+function wrap(x,text,maxW){
+  const ch=[...text],out=[];let line='';
+  for(const c of ch){if(x.measureText(line+c).width>maxW){out.push(line);line=c}else line+=c}
+  if(line)out.push(line);return out;
+}
+$('card').onclick=()=>{
+  if(!cur)return;
+  const Wd=1080,H=1350,c=document.createElement('canvas');c.width=Wd;c.height=H;
+  const x=c.getContext('2d');
+  // 泛黄纸面
+  const g=x.createLinearGradient(0,0,Wd,H);
+  g.addColorStop(0,'#f8f0dc');g.addColorStop(1,'#ecdcb6');
+  x.fillStyle=g;x.fillRect(0,0,Wd,H);
+  // 咖啡渍
+  x.strokeStyle='rgba(150,110,60,0.10)';x.lineWidth=14;
+  x.beginPath();x.arc(880,240,90,0,7);x.stroke();
+  x.strokeStyle='rgba(150,110,60,0.07)';x.lineWidth=8;
+  x.beginPath();x.arc(180,1120,60,0,7);x.stroke();
+  // 红色边线 + 横线格
+  x.strokeStyle='rgba(200,90,70,0.55)';x.lineWidth=4;
+  x.beginPath();x.moveTo(120,0);x.lineTo(120,H);x.stroke();
+  x.strokeStyle='rgba(120,100,70,0.28)';x.lineWidth=2;
+  for(let y=300;y<H-140;y+=72){x.beginPath();x.moveTo(60,y);x.lineTo(Wd-60,y);x.stroke()}
+  // 胶带
+  x.save();x.translate(Wd/2,20);x.rotate(0.03);
+  x.fillStyle='rgba(215,195,150,0.6)';x.fillRect(-90,-24,180,48);x.restore();
+  // 日期天气
+  x.fillStyle='#7a5c33';x.textAlign='left';
+  x.font='bold 44px "KaiTi","楷体",serif';
+  x.fillText(cur.date,150,180);
+  x.font='40px "KaiTi","楷体",serif';
+  x.fillText('天气：'+cur.weather,150,250);
+  // 正文
+  x.fillStyle='#4a3a24';
+  x.font='46px "Segoe Print","Bradley Hand","KaiTi","楷体",cursive';
+  const lines=wrap(x,cur.body,Wd-300);
+  let yy=400;
+  for(const ln of lines){x.fillText(ln,150,yy);yy+=78}
+  // 落款
+  x.fillStyle='#a68d5f';x.font='36px "KaiTi","楷体",serif';x.textAlign='center';
+  x.fillText('—— 舔狗日记 ——',Wd/2,H-90);
+  const a=document.createElement('a');a.href=c.toDataURL('image/png');
+  a.download='舔狗日记.png';a.click();
+};
+$('hist').onclick=e=>{
+  const d=e.target.dataset.i;if(d==null||!hist[d])return;
+};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');
+renderHist();pick();
+</script>
+</body>
+</html>
